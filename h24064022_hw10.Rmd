@@ -1,0 +1,372 @@
+---
+title: "H24064022_hw10"
+author: "林承穎"
+date: "2019/5/14"
+output: 
+  html_document:
+    toc: true
+    theme: united
+---
+## 1. Introduction to R
+###1-1基本運算子
+
+運算子  | 說明
+--------- | ---------
++  |  加法
+-  |  減法
+*  | 乘法
+/  | 除法
+^  | 次方
+%%  | 餘數
+%/%  | 除法整數部分
+
+####_Example 1.1_
+```{r}
+3^4
+```
+```{r}
+31%%6
+```
+```{r}
+46%/%7
+```
+
+###1-2變數
+
+>我們可以建立變數，將數值或各種資料儲存起來
+
+####_Example 1.2_
+```{r}
+interest <- 1.0025^30
+```
+其中 `<-` 亦可用 `=` 取代，不過由於這邊我們是賦予變數一個數值，使用前者像箭頭的運算子較能符合這個意義
+```{r}
+interest
+```
+必須再輸入一次變數，才能將他呼叫出來，看看它的值
+
+### 1-3向量
+
+####數值向量
+
+在 R 中最簡單的結構就是數值向量，可直接進行運算，利用 `c()` 可將物件收集成向量
+```{r}
+x<-c(0,7,8)
+x
+```
+####_Example 1.3_
+```{r}
+y <- x-5
+y
+x*3
+```
+`:`可用來創造一個遞增、遞減序列(sequence)
+```{r}
+numbers5to20 <- 5:20
+numbers5to20
+```
+```{r}
+numbers10to2 <- 10:2
+numbers10to2
+```
+利用 `[]` 來指定元素的索引（index），**索引以 1 為起始**，例如`numbers5to20`向量的第  3 個元素就是
+```{r}
+numbers5to20[3]
+```
+亦可同時指定一個以上的索引
+```{r}
+numbers5to20[3:7]
+numbers5to20[c(3,5,7,9)]
+```
+透過 `[]` 也可以直接更改向量中的特定元素
+```{r}
+numbers5to20[3] <- 777
+numbers5to20
+```
+<br/>
+
+####字元向量
+
+由字串組成的向量，向量內的元素屬性必須相同
+```{r}
+colors <- c("red", "yellow", "blue")
+more.colors <- c(colors, "green", "magenta", "cyan") # this appended some new elements to colors
+more.colors
+z <- c("red", "green", 1)  # an attempt to mix data types in a vector
+z # 1 has been converted to the character "1"
+```
+
+###1-4呼叫函數
+
+>R有許多內建函數，我們僅需要在函數後的小括弧內放入參數執行，即可得到輸出結果
+
+####數值向量函數
+
+- `abs()` : 絕對值
+
+- `sqrt()` : 開平方根
+
+- `ceiling()` : 無條件進位
+
+- `floor()` : 無條件捨去
+
+- `round()` : 四捨五入
+
+- `log()` : 以`e`為底取對數
+
+<br/>
+
+####敘述統計函數
+
+- `mean()` : 回傳向量的**平均**
+
+- `sd()` : 回傳向量**標準差**
+
+- `median()` : 回傳向量中的**中位數**
+
+- `range()` : 回傳向量中**最大和最小值**
+
+- `sum()` : 將向量的數值**加總**
+
+- `max()` : 回傳向量中**最大值** 
+
+- `min()` : 回傳向量中**最小值**
+
+<br/>
+
+####序列函數
+
+除了在上一部分提到的利用`c()`及`:`產生序列，亦可利用 `seq()` 和 `rep()`來進行更多變化
+
+####_Example 1.4_
+```{r}
+seq(1, 20)
+seq(from = 1, to = 20)
+1:20
+```
+我們可以看到以上三種寫法的輸出結果是完全一樣的。若在括號內加入 `by` 這個參數，則可以調整序列的步長，沒加入`by`的話，預設值為`1`
+```{r}
+seq1 <- seq(-5, 5, by = 0.2)
+seq1
+```
+還有一個相關的函數是 `rep()`，它可以用來重複一個物件
+
+####_Example 1.5_
+```{r}
+rep(3, 12)       # repeat the value 3, 12 times
+rep(seq(2, 20, by=2), 2)    # repeat the pattern 2 4 ... 20, twice
+rep(c(1, 4), c(3, 2))  # repeat 1, 3 times and  4, twice
+rep(c(1, 4), each=3)   # repeat each value 3 times
+```
+
+### 1-5 Data frames
+
+>類似矩陣，但每一行有自己的變數名稱，並且可以是不同的屬性。是R中常見的資料儲存格式，我們可以使用 `data.frame` 函數來建立
+
+```{r}
+colors <- c("red", "yellow", "blue")
+numbers <- c(1, 2, 3)
+colors.and.numbers <- data.frame(colors, numbers, more.numbers=c(4, 5, 6))
+colors.and.numbers
+```
+可使用 `dimnames` 一次存取所有列與行的名稱。
+
+```{r}
+dimnames(colors.and.numbers)
+```
+
+## 2. Programming with R
+
+### 2-1 if else判斷式
+
+> `if` 判斷式是一種**條件判斷**語法，他可以判斷一個輸入的邏輯值，如果輸入的值為 TRUE，則執行對應的程式碼，反之該值若為 FALSE，則不執行
+
+將欲判斷的條件放在小括號內、欲執行的指令以大括號包起來
+
+####_Example 2.1_
+```{r}
+x <- 3
+if (x > 2){
+  y <- 2 * x 
+}else{           #else一定要和前一句的 } 寫在同一行
+  y <- 3 * x
+} 
+y
+```
+####_Example 2.2_
+```{r}
+x <- 5
+if (x > 3){
+  y <- 2 * x 
+}else if(x > 2){
+  y <- 5 * x
+}else{           
+  y <- 3 * x
+} 
+y
+```
+`if()`條件的判斷是有先後順序的，若if的敘述判斷為真，就算else if也為真，也只有第一個為真的條件會被執行
+
+### 2-2 while迴圈
+
+> while 迴圈是簡單的迴圈控制結構，會先檢查指定的條件，在條件為 TRUE 的情況下才會執行迴圈的內容
+
+####_Example 2.3_
+```{r}
+x <- 0
+while (x != 5) {
+  print(x)
+  x <- x + 1
+}
+```
+
+### 2-3 for迴圈
+
+>for 迴圈主要是用在程式執行前就已經給定執行範圍，他會在範圍內依序並且重複執行迴圈的內容
+
+####_Example 2.4_
+```{r}
+for ( x in 0:4 ) {
+  print(x)
+}
+```
+若想終止迴圈則可使用 `break`
+```{r}
+for ( x in 0:8 ) {
+  if(x==3) break
+  print(x)
+}
+```
+
+## 3. Statistical graphics
+
+### 3-1 Basic plots
+> R內建了許多基礎繪圖函數，我們只需要選擇想要的圖表類型並輸入資料即可
+
+- ###Bar charts
+
+資料類型必須為**類別資料**，這裡以內建資料集 `VADeaths` 作為範例
+```{r}
+barplot(VADeaths, beside=TRUE, legend=TRUE, ylim=c(0, 90),
+         ylab="Deaths per 1000",
+         main="Death rates in Virginia")
+
+# beside=TRUE argument causes the values in each column to be plotted side-by-side
+# legend=TRUE causes the legend in the top right to be added
+# ylim=c(0, 90) argument modifies the verti- cal scale of the graph to make room for the legend
+# main=argument sets the main title for the plot
+```
+- ###Pie charts
+```{r}
+groupsizes <- c(18, 30, 32, 10, 10)
+labels <- c("A", "B", "C", "D", "F")
+pie(groupsizes, labels, col=c("grey40", "white", "grey", "black", "grey90"))
+```
+
+- ###Histograms
+
+類似Bar charts，不過用於**連續資料**的次數分佈呈現，這裡以內建資料集 `iris` 作為範例
+```{r}
+hist(iris$Sepal.Width)
+```
+
+- ###Box plots
+
+利用盒形圖可讓人一目了然資料的四分位數以及最大最小值
+```{r}
+boxplot(Sepal.Length  ~ Species, data = iris,
+        ylab = "Sepal length (cm)", main = "Iris measurements",
+        boxwex = 0.5)
+
+```
+
+- ###Scatterplots
+
+用於觀察資料中兩個變數之間的關係，這裡以內建資料集 `mtcars` 作為範例
+```{r}
+plot(mtcars$wt, mtcars$mpg)
+```
+
+- ###QQ plots
+
+分位數圖，用來檢驗樣本是否來自常態分佈的母體，是則其Q-Q 圖近似於一條直線，反之則否
+```{r}
+par(mfrow = c(2,2)) # c(2,2)，表示建立一個2x2的空間，用來呈現多張圖
+X <- rnorm(1000)
+A <- rnorm(1000)
+qqplot(X, A, main="A and X are the same")
+B <- rnorm(1000, mean=3, sd=2)
+qqplot(X, B, main="B is rescaled X")
+C <- rt(1000, df=2)
+qqplot(X, C, main="C has heavier tails")
+D <- exp(rnorm(1000))
+qqplot(X, D, main="D is skewed to the right")
+
+```
+
+###3-2 Adding to plots
+畫完基本的統計圖，可以透過一些函數在圖上加其他東西
+```{r}
+par(mar=c(5, 5, 5, 5) + 0.1)  #設計一個四邊皆為5.1cm的繪圖空間
+plot(c(1, 9), c(0, 50), type="n", xlab="", ylab="")
+text(6, 40, "Plot region") #在（6,20) 加上文字
+points(6, 20)  #標記點
+text(6, 20, "(6, 20)", adj=c(0.5, 2))
+mtext(paste("Margin", 1:4), side=1:4, line=3)  #在圖上加上文字
+mtext(paste("Line", 0:4), side=1, line=0:4, at=3, cex=0.6)
+```
+
+## 4. Simulation
+
+###4-1 Uniform隨機數生成
+
+利用`runif(n, min = a, max = b)`生成**均勻分布**的隨機數，其初始值為`a=0`,`b=1`
+
+```{r}
+runif(5)
+runif(10, min = -3, max = -1)
+```
+
+###4-2 其他分佈隨機數
+
+- ####Binomial random variables `rbinom(n, size, prob)`
+```{r}
+#The output from this function is the value of P(X = x)
+dbinom(x = 4, size = 6, prob = 0.5)
+```
+
+```{r}
+#Cumulative probabilities of the form P(X ≤ x) 
+ pbinom(4, 6, 0.5)
+```
+
+```{r}
+#The 89th percentile of the distribution of X 
+qbinom(0.89, 6, 0.5)
+```
+
+- ####Poisson random variables `rpois(n, lambda)`
+```{r}
+#Calculate P(X = 3)
+dpois(x = 3, lambda = 0.5)
+```
+
+```{r}
+#Cumulative probabilities of the form P(X ≤ x)：ppois()
+# Poisson quantiles：qpois()
+```
+
+- #### Exponential random numbers `rexp(n, rate)`
+```{r}
+rexp(10, rate = 3)
+```
+
+- ####Normal random variables `rnorm(n, mean, sd)`
+```{r}
+rnorm(10, -3, 0.5)
+```
+
+<br/>
+
+<br/>
+
